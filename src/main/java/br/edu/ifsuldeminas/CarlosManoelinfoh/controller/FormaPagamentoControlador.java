@@ -1,0 +1,128 @@
+package br.edu.ifsuldeminas.CarlosManoelinfoh.controller;
+
+import br.edu.ifsuldeminas.CarlosManoelinfoh.modelo.dao.FormaPagamentoDao;
+import br.edu.ifsuldeminas.CarlosManoelinfoh.modelo.entity.FormaPagamento;
+import br.edu.ifsuldeminas.CarlosManoelinfoh.servico.WebConstante;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet(WebConstante.BASE_PATH + "/FormaPagamentoControlador")
+public class FormaPagamentoControlador extends HttpServlet {
+
+    FormaPagamento objFormaPagamento = new FormaPagamento();
+    FormaPagamentoDao objFormaPagamentoDao = new FormaPagamentoDao();
+
+    String codigoFormaPagamento = "";
+    String descricao = "";
+    String opcao = "";
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        try {
+            opcao = request.getParameter("opcao");
+            if (opcao == null || opcao.isEmpty()) {
+                opcao = "listar";
+            }
+
+            codigoFormaPagamento = request.getParameter("codigoFormaPagamento");
+            descricao = request.getParameter("descricao");
+
+            switch (opcao) {
+                case "cadastrar":
+                    cadastrar(request, response);
+                    break;
+                case "listar":
+                    encaminharParaPagina(request, response);
+                    break;
+                case "novo":
+                case "cancelar":
+                    cancelar(request, response);
+                    break;
+                case "editar":
+                case "enviarAlterar":
+                    enviarAlterar(request, response);
+                    break;
+                case "confirmarAlterar":
+                    confirmarAlterar(request, response);
+                    break;
+                case "excluir":
+                case "enviarExcluir":
+                    enviarExcluir(request, response);
+                    break;
+                case "confirmarExcluir":
+                    confirmarExcluir(request, response);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Opcao invalida: " + opcao);
+            }
+
+        } catch (NumberFormatException e) {
+            response.getWriter().println("Erro: Parametro numerico invalido - " + e.getMessage());
+        } catch (IllegalArgumentException ex) {
+            response.getWriter().println("Erro: " + ex.getMessage());
+        }
+    }
+
+    private void cadastrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        objFormaPagamento.setDescricao(descricao);
+
+        objFormaPagamentoDao.salvar(objFormaPagamento);
+        request.setAttribute("mensagem", "Forma de pagamento cadastrada com sucesso!");
+        cancelar(request, response);
+    }
+
+    private void enviarAlterar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        FormaPagamento formaPagamento = objFormaPagamentoDao.buscarFormaPagamentoPorId(Integer.valueOf(codigoFormaPagamento));
+
+        request.setAttribute("formaPagamentoEdicao", formaPagamento);
+        request.setAttribute("modoFormulario", "editar");
+        request.setAttribute("opcao", "confirmarAlterar");
+        request.setAttribute("mensagem", "Edite os dados da forma de pagamento");
+        encaminharParaPagina(request, response);
+    }
+
+    private void confirmarAlterar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        objFormaPagamento.setCodigoFormaPagamento(Integer.valueOf(codigoFormaPagamento));
+        objFormaPagamento.setDescricao(descricao);
+
+        objFormaPagamentoDao.alterar(objFormaPagamento);
+        cancelar(request, response);
+    }
+
+    private void enviarExcluir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        confirmarExcluir(request, response);
+    }
+
+    private void confirmarExcluir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        objFormaPagamento.setCodigoFormaPagamento(Integer.valueOf(codigoFormaPagamento));
+        objFormaPagamentoDao.excluir(objFormaPagamento);
+        cancelar(request, response);
+    }
+
+    private void cancelar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setAttribute("formaPagamentoEdicao", null);
+        request.setAttribute("modoFormulario", "cadastrar");
+        request.setAttribute("codigoFormaPagamento", "0");
+        request.setAttribute("descricao", "");
+        request.setAttribute("opcao", "cadastrar");
+        encaminharParaPagina(request, response);
+    }
+
+    private void encaminharParaPagina(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        List<FormaPagamento> formasPagamento = objFormaPagamentoDao.buscarTodasFormasPagamento();
+        request.setAttribute("formasPagamento", formasPagamento);
+
+        if (request.getAttribute("modoFormulario") == null) {
+            request.setAttribute("modoFormulario", "cadastrar");
+        }
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/CadastroFormaPagamento.jsp");
+        dispatcher.forward(request, response);
+    }
+}

@@ -1,0 +1,133 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    color: #222;
+}
+
+.menu ul {
+    margin: 0;
+    padding: 12px;
+    list-style: none;
+    background: #333;
+}
+
+.menu li {
+    display: inline-block;
+    margin-right: 12px;
+}
+
+.menu a,
+.card-home a,
+.link-acao {
+    color: #0b63ce;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.menu a {
+    color: #fff;
+}
+
+.menu a:hover,
+.card-home a:hover,
+.link-acao:hover {
+    text-decoration: underline;
+}
+
+.conteudo-home {
+    max-width: 1100px;
+    margin: 24px auto;
+    padding: 0 16px;
+}
+
+.banner-farmacia {
+    padding: 50px 16px;
+    text-align: center;
+    background: #dfefff;
+}
+
+.grid-cadastros {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.card-home {
+    margin-bottom: 16px;
+    padding: 16px;
+    background: #fff;
+    border: 1px solid #ddd;
+}
+
+.formulario {
+    display: grid;
+    gap: 10px;
+}
+
+.acoes-formulario,
+.acoes-tabela {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+input,
+button,
+.botao {
+    padding: 8px;
+    font: inherit;
+}
+
+.botao {
+    display: inline-block;
+    border: 0;
+    background: #0b63ce;
+    color: #fff;
+    cursor: pointer;
+}
+
+.botao-secundario {
+    background: #666;
+}
+
+.mensagem {
+    margin: 10px 0;
+    padding: 10px;
+}
+
+.sucesso {
+    background: #dff0d8;
+}
+
+.erro,
+.excluir {
+    color: #b00020;
+}
+
+.tabela {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabela-home {
+    overflow-x: auto;
+}
+
+.tabela th,
+.tabela td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.footer-cassino {
+    padding: 16px;
+    text-align: center;
+    background: #333;
+    color: #fff;
+}
