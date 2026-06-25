@@ -8,8 +8,9 @@ public class Fornecedor {
     private String cnpjOriginal;
     private String telefone;
     private String email;
-    private String cidade;
 
+     private Cidade cidade = new Cidade();//relacionamento
+     
     public Integer getCodigoFornecedor() {
         return codigoFornecedor;
     }
@@ -66,15 +67,10 @@ public class Fornecedor {
         this.email = email;
     }
 
-    public String getCidade() {
+    public Cidade getCidade() {
         return cidade;
     }
 
-    public void setCidade(String cidade) {
+    public void setCidade(Cidade cidade) {
         this.cidade = cidade;
-    }
-
-    public void salvar(Fornecedor objFornecedor) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-}
+    }}

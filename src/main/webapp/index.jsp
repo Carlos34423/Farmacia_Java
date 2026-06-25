@@ -21,32 +21,48 @@
             <div class="grid-cadastros">
                 <div class="card-home">
                     <h2>Categoria</h2>
-                    <a href="${pageContext.request.contextPath}${URL_BASE}/CategoriaMedicamentoControlador?opcao=listar">Abrir cadastro</a>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/CategoriaMedicamentoControlador?opcao=cancelar">Abrir cadastro</a>
                 </div>
 
                 <div class="card-home">
                     <h2>Cargo</h2>
-                    <a href="${pageContext.request.contextPath}${URL_BASE}/CargoControlador?opcao=listar">Abrir cadastro</a>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/CargoControlador?opcao=cancelar">Abrir cadastro</a>
                 </div>
 
                 <div class="card-home">
                     <h2>Convenio</h2>
-                    <a href="${pageContext.request.contextPath}${URL_BASE}/ConvenioControlador?opcao=listar">Abrir cadastro</a>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/ConvenioControlador?opcao=cancelar">Abrir cadastro</a>
                 </div>
 
                 <div class="card-home">
                     <h2>Fabricante</h2>
-                    <a href="${pageContext.request.contextPath}${URL_BASE}/FabricanteControlador?opcao=listar">Abrir cadastro</a>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/FabricanteControlador?opcao=cancelar">Abrir cadastro</a>
                 </div>
 
                 <div class="card-home">
                     <h2>Forma de Pagamento</h2>
-                    <a href="${pageContext.request.contextPath}${URL_BASE}/FormaPagamentoControlador?opcao=listar">Abrir cadastro</a>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/FormaPagamentoControlador?opcao=cancelar">Abrir cadastro</a>
                 </div>
 
                 <div class="card-home">
                     <h2>Fornecedor</h2>
-                    <a href="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador?opcao=listar">Abrir cadastro</a>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador?opcao=cancelar">Abrir cadastro</a>
+                </div>
+                <div class="card-home">
+                    <h2>Medicamento</h2>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/MedicamentoControlador?opcao=cancelar">Abrir cadastro</a>
+                </div>
+                 <div class="card-home">
+                    <h2>Cliente</h2>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/ClienteControlador?opcao=cancelar">Abrir cadastro</a>
+                </div>
+                   <div class="card-home">
+                    <h2>Funcionario</h2>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/FuncionarioControlador?opcao=cancelar">Abrir cadastro</a>
+                </div>
+                    <div class="card-home">
+                    <h2>Medicamento</h2>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/MedicamentoControlador?opcao=cancelar">Abrir cadastro</a>
                 </div>
             </div>
         </section>

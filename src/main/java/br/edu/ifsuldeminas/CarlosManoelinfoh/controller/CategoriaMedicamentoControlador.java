@@ -106,7 +106,8 @@ public class CategoriaMedicamentoControlador extends HttpServlet {
 
     private void confirmarExcluir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         objCategoriaMedicamento.setCodigoCategoriaMedicamento(Integer.valueOf(codigoCategoriaMedicamento));
-        objCategoriaMedicamentoDao.excluir(objCategoriaMedicamento);
+        objCategoriaMedicamentoDao.excluir(
+        Integer.valueOf(codigoCategoriaMedicamento));
         cancelar(request, response);
     }
 
@@ -121,7 +122,7 @@ public class CategoriaMedicamentoControlador extends HttpServlet {
     }
 
     private void encaminharParaPagina(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        List<CategoriaMedicamento> categorias = objCategoriaMedicamentoDao.buscarTodasCategoriasMedicamento();
+        List<CategoriaMedicamento> categorias = objCategoriaMedicamentoDao.buscarTodasCategoriasMedicamentos();
         request.setAttribute("categorias", categorias);
 
         if (request.getAttribute("modoFormulario") == null) {

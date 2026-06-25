@@ -1,91 +1,169 @@
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html" pageEncoding="Latin1"%>
+
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Cadastro de Fornecedor</title>
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
-    </head>
-    <body>
-        <%@include file="menu.jsp" %>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=Latin1">
+    <title>Cadastro de Fornecedor</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
+</head>
 
-        <div class="conteudo-home">
-            <div class="card-home">
-                <h2>Cadastro de Fornecedor</h2>
-                <c:if test="${not empty mensagem}">
-                    <div class="mensagem sucesso">${mensagem}</div>
-                </c:if>
-                <c:if test="${not empty mensagemErro}">
-                    <div class="mensagem erro">${mensagemErro}</div>
-                </c:if>
+<body>
 
-                <form class="formulario" method="get" action="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador">
-                    <input type="hidden" name="opcao" value="${modoFormulario eq 'editar' ? 'confirmarAlterar' : 'cadastrar'}">
-                    <input type="hidden" name="cnpjOriginal" value="${fornecedorEdicao.cnpjOriginal}">
+<%@include file="menu.jsp" %>
 
-                    <label for="razaoSocial">Razao Social</label>
-                    <input id="razaoSocial" type="text" name="razaoSocial" maxlength="120" required value="${fornecedorEdicao.razaoSocial}">
+<div class="conteudo-home">
 
-                    <label for="nomeFantasia">Nome Fantasia</label>
-                    <input id="nomeFantasia" type="text" name="nomeFantasia" maxlength="120" required value="${fornecedorEdicao.nomeFantasia}">
+    <div class="card-home">
 
-                    <label for="cnpj">CNPJ</label>
-                    <input id="cnpj" type="text" name="cnpj" maxlength="18" required value="${fornecedorEdicao.cnpj}">
+        <h2>Cadastro de Fornecedor</h2>
 
-                    <label for="telefone">Telefone</label>
-                    <input id="telefone" type="text" name="telefone" maxlength="20" required value="${fornecedorEdicao.telefone}">
+        <c:if test="${not empty mensagem}">
+            <div class="mensagem sucesso">${mensagem}</div>
+        </c:if>
 
-                    <label for="email">Email</label>
-                    <input id="email" type="email" name="email" maxlength="120" required value="${fornecedorEdicao.email}">
+        <c:if test="${not empty mensagemErro}">
+            <div class="mensagem erro">${mensagemErro}</div>
+        </c:if>
 
-                    <label for="cidade">Cidade</label>
-                    <input id="cidade" type="text" name="cidade" maxlength="80" required value="${fornecedorEdicao.cidade}">
+        <form class="formulario"
+              method="get"
+              action="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador">
 
-                    <div class="acoes-formulario">
-                        <button class="botao" type="submit">${modoFormulario eq 'editar' ? 'Salvar alteracoes' : 'Cadastrar'}</button>
-                        <a class="botao botao-secundario" href="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador?opcao=novo">Limpar</a>
-                    </div>
-                </form>
+            <input type="hidden"
+                   name="opcao"
+                   value="${opcao}">
+
+            <input type="hidden"
+                   name="codigoFornecedor"
+                   value="${codigoFornecedor}">
+
+            <label>Razão Social</label>
+            <input type="text"
+                   name="razaoSocial"
+                   value="${razaoSocial}">
+
+            <label>Nome Fantasia</label>
+            <input type="text"
+                   name="nomeFantasia"
+                   value="${nomeFantasia}">
+
+            <label>CNPJ</label>
+            <input type="text"
+                   name="cnpj"
+                   value="${cnpj}">
+
+            <label>Telefone</label>
+            <input type="text"
+                   name="telefone"
+                   value="${telefone}">
+
+            <label>Email</label>
+            <input type="text"
+                   name="email"
+                   value="${email}">
+
+            <label>Cidade</label>
+
+            <select name="cidadeFuncionario">
+
+                <option value="">Selecione...</option>
+
+                <c:forEach var="cidade" items="${listaCidade}">
+                    <option value="${cidade.codigoCidade}"
+                        ${cidade.codigoCidade == cidadeFuncionario ? 'selected="selected"' : ''}>
+                        ${cidade.nome}
+                    </option>
+                </c:forEach>
+
+            </select>
+
+            <div class="acoes-formulario">
+
+                <button class="botao" type="submit">
+                    Salvar
+                </button>
+
+                <a class="botao botao-secundario"
+                   href="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador?opcao=cancelar">
+                    Limpar
+                </a>
+
             </div>
 
-            <div class="card-home tabela-home">
-                <h2>Fornecedores cadastrados</h2>
-                <table class="tabela">
-                    <thead>
-                        <tr>
-                            <th>Razao Social</th>
-                            <th>Nome Fantasia</th>
-                            <th>CNPJ</th>
-                            <th>Telefone</th>
-                            <th>Email</th>
-                            <th>Cidade</th>
-                            <th>Acoes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:forEach var="fornecedor" items="${fornecedores}">
-                            <tr>
-                                <td>${fornecedor.razaoSocial}</td>
-                                <td>${fornecedor.nomeFantasia}</td>
-                                <td>${fornecedor.cnpj}</td>
-                                <td>${fornecedor.telefone}</td>
-                                <td>${fornecedor.email}</td>
-                                <td>${fornecedor.cidade}</td>
-                                <td class="acoes-tabela">
-                                    <a class="link-acao" href="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador?opcao=editar&cnpj=${fornecedor.cnpj}">Editar</a>
-                                    <a class="link-acao excluir" href="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador?opcao=excluir&cnpj=${fornecedor.cnpj}" onclick="return confirm('Deseja excluir este fornecedor?');">Excluir</a>
-                                </td>
-                            </tr>
-                        </c:forEach>
-                        <c:if test="${empty fornecedores}">
-                            <tr>
-                                <td colspan="7">Nenhum fornecedor cadastrado ainda.</td>
-                            </tr>
-                        </c:if>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </body>
+        </form>
+
+    </div>
+
+    <div class="card-home tabela-home">
+
+        <h2>Fornecedores cadastrados</h2>
+
+        <table class="tabela">
+
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Razão Social</th>
+                    <th>Nome Fantasia</th>
+                    <th>CNPJ</th>
+                    <th>Telefone</th>
+                    <th>Email</th>
+                    <th>Cidade</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <c:forEach var="fornecedor" items="${fornecedores}">
+
+                    <tr>
+
+                        <td>${fornecedor.codigoFornecedor}</td>
+                        <td>${fornecedor.razaoSocial}</td>
+                        <td>${fornecedor.nomeFantasia}</td>
+                        <td>${fornecedor.cnpj}</td>
+                        <td>${fornecedor.telefone}</td>
+                        <td>${fornecedor.email}</td>
+                        <td>${fornecedor.cidade.nome}</td>
+
+                        <td class="acoes-tabela">
+
+                            <a class="link-acao"
+                               href="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador?opcao=enviarAlterar&codigoFornecedor=${fornecedor.codigoFornecedor}">
+                                Editar
+                            </a>
+
+                            <a class="link-acao excluir"
+                               href="${pageContext.request.contextPath}${URL_BASE}/FornecedorControlador?opcao=enviarExcluir&codigoFornecedor=${fornecedor.codigoFornecedor}"
+                               onclick="return confirm('Deseja excluir este fornecedor?');">
+                                Excluir
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                </c:forEach>
+
+                <c:if test="${empty fornecedores}">
+                    <tr>
+                        <td colspan="8">
+                            Nenhum fornecedor cadastrado ainda.
+                        </td>
+                    </tr>
+                </c:if>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
 </html>

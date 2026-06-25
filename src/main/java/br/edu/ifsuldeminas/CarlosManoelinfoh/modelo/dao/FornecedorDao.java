@@ -7,28 +7,45 @@ import java.util.List;
 
 public class FornecedorDao extends GenericoDAO<Fornecedor> {
 
-    public void salvar(Fornecedor objFornecedor) {
-        String sql = "INSERT INTO fornecedor(razaoSocial,nomeFantasia,cnpj,telefone,email,cidade) VALUES(?,?,?,?,?,?)";
-        save(sql, objFornecedor.getRazaoSocial(), objFornecedor.getNomeFantasia(),
-                objFornecedor.getCnpj(), objFornecedor.getTelefone(),
-                objFornecedor.getEmail(), objFornecedor.getCidade());
-    }
+public void salvar(Fornecedor objFornecedor) {
 
-    public void alterar(Fornecedor objFornecedor) {
-        String sql = "UPDATE fornecedor SET razaoSocial=?,nomeFantasia=?,cnpj=?,telefone=?,email=?,cidade=? WHERE cnpj=?";
-        save(sql, objFornecedor.getRazaoSocial(), objFornecedor.getNomeFantasia(),
-                objFornecedor.getCnpj(), objFornecedor.getTelefone(),
-                objFornecedor.getEmail(), objFornecedor.getCidade(),
-                objFornecedor.getCnpjOriginal());
-    }
+    String sql =
+        "INSERT INTO fornecedor (razaoSocial,nomeFantasia,cnpj,telefone,email,codigoCidade) VALUES(?,?,?,?,?,?)";
 
-    public void excluir(Fornecedor objFornecedor) {
-        String sql = "DELETE FROM fornecedor WHERE cnpj=?";
-        save(sql, objFornecedor.getCnpj());
-    }
+    save(sql,
+            objFornecedor.getRazaoSocial(),
+            objFornecedor.getNomeFantasia(),
+            objFornecedor.getCnpj(),
+            objFornecedor.getTelefone(),
+            objFornecedor.getEmail(),
+            objFornecedor.getCidade().getCodigoCidade());
+}
+
+ public void alterar(Fornecedor objFornecedor) {
+
+    String sql =
+        "UPDATE fornecedor SET razaoSocial=?,nomeFantasia=?, cnpj=?, telefone=?, email=?, codigoCidade=? WHERE codigoFornecedor=?";
+
+    save(sql,
+            objFornecedor.getRazaoSocial(),
+            objFornecedor.getNomeFantasia(),
+            objFornecedor.getCnpj(),
+            objFornecedor.getTelefone(),
+            objFornecedor.getEmail(),
+            objFornecedor.getCidade().getCodigoCidade(),
+            objFornecedor.getCodigoFornecedor());
+}
+
+public void excluir(Integer codigoFornecedor) {
+
+    String sql =
+        "DELETE FROM fornecedor WHERE codigoFornecedor=?";
+
+    save(sql, codigoFornecedor);
+}
 
     private static class FornecedorRowMapper implements RowMapper<Fornecedor> {
-
+        CidadeDao cidadeDao = new CidadeDao();
         @Override
         public Fornecedor mapRow(ResultSet rs) throws SQLException {
             Fornecedor objFornecedor = new Fornecedor();
@@ -38,8 +55,8 @@ public class FornecedorDao extends GenericoDAO<Fornecedor> {
             objFornecedor.setCnpj(rs.getString("cnpj"));
             objFornecedor.setTelefone(rs.getString("telefone"));
             objFornecedor.setEmail(rs.getString("email"));
-            objFornecedor.setCidade(rs.getString("cidade"));
 
+               objFornecedor.setCidade(cidadeDao.buscarCidadePorId(rs.getInt("codigoCidade")));
             return objFornecedor;
         }
     }
@@ -49,8 +66,8 @@ public class FornecedorDao extends GenericoDAO<Fornecedor> {
         return buscarTodos(sql, new FornecedorRowMapper());
     }
 
-    public Fornecedor buscarFornecedorPorCnpj(String cnpj) {
-        String sql = "SELECT * FROM fornecedor WHERE cnpj = ?";
-        return buscarPorId(sql, new FornecedorRowMapper(), cnpj);
+    public Fornecedor buscarFornecedorPorId(Integer codigoFornecedor) {
+        String sql = "SELECT * FROM fornecedor WHERE codigoFornecedor = ?";
+        return buscarPorId(sql, new FornecedorRowMapper(), codigoFornecedor);
     }
 }
