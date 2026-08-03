@@ -64,6 +64,10 @@
                     <h2>Medicamento</h2>
                     <a href="${pageContext.request.contextPath}${URL_BASE}/MedicamentoControlador?opcao=cancelar">Abrir cadastro</a>
                 </div>
+                       <div class="card-home">
+                    <h2>Cidade</h2>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/CidadeControlador?opcao=cancelar">Abrir cadastro</a>
+                </div>
             </div>
         </section>
 

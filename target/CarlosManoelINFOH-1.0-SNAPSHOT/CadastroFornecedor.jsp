@@ -1,11 +1,11 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="Latin1"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=Latin1">
+    <meta charset="UTF-8">
     <title>Cadastro de Fornecedor</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
 </head>
@@ -40,7 +40,7 @@
                    name="codigoFornecedor"
                    value="${codigoFornecedor}">
 
-            <label>Razão Social</label>
+            <label>RazÃ£o Social</label>
             <input type="text"
                    name="razaoSocial"
                    value="${razaoSocial}">
@@ -105,14 +105,14 @@
 
             <thead>
                 <tr>
-                    <th>Código</th>
-                    <th>Razão Social</th>
+                    <th>CÃ³digo</th>
+                    <th>RazÃ£o Social</th>
                     <th>Nome Fantasia</th>
                     <th>CNPJ</th>
                     <th>Telefone</th>
                     <th>Email</th>
                     <th>Cidade</th>
-                    <th>Ações</th>
+                    <th>AÃ§Ãµes</th>
                 </tr>
             </thead>
 

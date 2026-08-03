@@ -40,8 +40,8 @@ public class CidadeControlador extends HttpServlet {
     }
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // erro remover super do Get
-        
+request.setCharacterEncoding("UTF-8");
+response.setCharacterEncoding("UTF-8");
         try {
             opcao = request.getParameter("opcao");
             if (opcao == null || opcao.isEmpty()) {
@@ -74,16 +74,31 @@ public class CidadeControlador extends HttpServlet {
         objCidadeDao.salvar(objCidade);
         request.setAttribute("mensagem", "Cidade cadastrada com sucesso!");
         encaminharParaPagina(request, response);
-        //return;
+
     }
-     private void enviarAlterar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-     request.setAttribute("codigoCidade", codigoCidade);
-     request.setAttribute("nome", nome);
-     request.setAttribute("ufC", uf);
-     request.setAttribute("opcao", "confirmarAlterar");
-     request.setAttribute("mensagem", "Edite os dados e clique em Salvar");
-     encaminharParaPagina(request, response);
-     }
+private void enviarAlterar(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+
+
+    int codigoCidade = Integer.parseInt(request.getParameter("codigoCidade"));
+
+
+    Cidade cidade = objCidadeDao.buscarCidadePorId(codigoCidade);
+
+
+    request.setAttribute("codigoCidade", cidade.getCodigoCidade());
+
+    request.setAttribute("nome", cidade.getNome());
+
+    request.setAttribute("uf", cidade.getUf());
+
+
+   request.setAttribute("opcao", "confirmarAlterar");
+
+
+    encaminharParaPagina(request, response);
+
+}
      private void enviarExcluir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
      request.setAttribute("codigoCidade", codigoCidade);
      request.setAttribute("nome", nome);
@@ -102,8 +117,7 @@ public class CidadeControlador extends HttpServlet {
        }
        private void confirmarExcluir(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
        objCidade.setCodigoCidade(Integer.valueOf(codigoCidade));
-       //objCidade.setNomeCidade(nomeCidade);
-       //objCidade.setUfCidade(ufCidade);
+
        objCidadeDao.excluir(objCidade);
        encaminharParaPagina(request, response);
        }
@@ -111,8 +125,7 @@ public class CidadeControlador extends HttpServlet {
     
       private void encaminharParaPagina(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Cidade> listaCidade = objCidadeDao.buscarTodasCidades();
-        request.setAttribute("listaCidade", listaCidade);
-        //request.setAttribute("opcao", opcao);
+        request.setAttribute("cidades", listaCidade);
         RequestDispatcher dispatcher = request.getRequestDispatcher("/CadastroCidade.jsp");
         dispatcher.forward(request, response);
         

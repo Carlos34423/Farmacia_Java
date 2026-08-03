@@ -1,12 +1,12 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="Latin1"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=Latin1">
-    <title>Cadastro de Funcionário</title>
+   <meta charset="UTF-8">
+    <title>Cadastro de FuncionÃ¡rio</title>
 
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
 </head>
@@ -19,7 +19,7 @@
 
     <div class="card-home">
 
-        <h2>Cadastro de Funcionário</h2>
+        <h2>Cadastro de FuncionÃ¡rio</h2>
 
         <c:if test="${not empty mensagem}">
             <div class="mensagem sucesso">${mensagem}</div>
@@ -104,20 +104,20 @@
 
     <div class="card-home tabela-home">
 
-        <h2>Funcionários cadastrados</h2>
+        <h2>FuncionÃ¡rios cadastrados</h2>
 
         <table class="tabela">
 
             <thead>
                 <tr>
-                    <th>Código</th>
+                    <th>CÃ³digo</th>
                     <th>Nome</th>
                     <th>CPF</th>
                     <th>Telefone</th>
                     <th>Email</th>
                     <th>Cargo</th>
                     <th>Cidade</th>
-                    <th>Ações</th>
+                    <th>AÃ§Ãµes</th>
                 </tr>
             </thead>
 
@@ -144,7 +144,7 @@
 
                             <a class="link-acao excluir"
                                href="${pageContext.request.contextPath}${URL_BASE}/FuncionarioControlador?opcao=enviarExcluir&codigoFuncionario=${funcionario.codigoFuncionario}"
-                               onclick="return confirm('Deseja excluir este funcionário?');">
+                               onclick="return confirm('Deseja excluir este funcionÃ¡rio?');">
                                 Excluir
                             </a>
 

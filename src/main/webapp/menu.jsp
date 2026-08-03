@@ -1,3 +1,9 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+      <meta charset="UTF-8">
+        </head>
 <nav class="menu">
     <ul>
         <li><a class="contex" href="${pageContext.request.contextPath}/index.jsp">HOME</a></li>
@@ -11,5 +17,6 @@
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/ClienteControlador?opcao=cancelar">CLIENTE</a></li>
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/FuncionarioControlador?opcao=cancelar">FUNCIONARIO</a></li>
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/MedicamentoControlador?opcao=cancelar">MEDICAMENTO</a></li>
+                <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/CidadeControlador?opcao=cancelar">CIDADE</a></li>
     </ul>
 </nav>

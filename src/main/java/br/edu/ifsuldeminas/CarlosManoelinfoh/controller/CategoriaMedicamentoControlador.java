@@ -25,7 +25,8 @@ public class CategoriaMedicamentoControlador extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        try {
+       request.setCharacterEncoding("UTF-8");
+response.setCharacterEncoding("UTF-8"); try {
             opcao = request.getParameter("opcao");
             if (opcao == null || opcao.isEmpty()) {
                 opcao = "listar";

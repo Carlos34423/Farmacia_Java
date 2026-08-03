@@ -1,11 +1,11 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="Latin1"%>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=Latin1">
+   <meta charset="UTF-8">
     <title>Cadastro de Cliente</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/estilo.css">
 </head>
@@ -75,7 +75,7 @@
 
             </select>
 
-            <label>Convênio</label>
+            <label>ConvÃªnio</label>
 
             <select name="convenioCliente">
 
@@ -115,14 +115,14 @@
 
             <thead>
                 <tr>
-                    <th>Código</th>
+                    <th>CÃ³digo</th>
                     <th>Nome</th>
                     <th>CPF</th>
                     <th>Telefone</th>
                     <th>Email</th>
                     <th>Cidade</th>
-                    <th>Convênio</th>
-                    <th>Ações</th>
+                    <th>ConvÃªnio</th>
+                    <th>AÃ§Ãµes</th>
                 </tr>
             </thead>
 
