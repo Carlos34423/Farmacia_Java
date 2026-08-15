@@ -17,6 +17,7 @@ public class Cliente {
     private String email;
     private Cidade cidade;
     private Convenio convenio;
+    private Float carteira;
 
     public Integer getCodigoCliente() {
         return codigoCliente;
@@ -72,5 +73,13 @@ public class Cliente {
 
     public void setConvenio(Convenio convenio) {
         this.convenio = convenio;
+    }
+
+    public Float getCarteira() {
+        return carteira;
+    }
+
+    public void setCarteira(Float carteira) {
+        this.carteira = carteira;
     }
 }

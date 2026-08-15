@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -40,6 +42,8 @@ public class ClienteControlador extends HttpServlet {
 
     Cidade cidade;
     Convenio convenio;
+    Float carteira;
+    String erroFormatoCarteira;
 
     String opcao = "";
 
@@ -97,6 +101,21 @@ response.setCharacterEncoding("UTF-8");
                                 Integer.valueOf(codigoConvenioStr));
             }
 
+            String carteiraStr = request.getParameter("carteira");
+            erroFormatoCarteira = null;
+
+            if (carteiraStr != null && !carteiraStr.isBlank()) {
+                try {
+                    carteira = Float.valueOf(
+                            carteiraStr.trim().replace(",", "."));
+                } catch (NumberFormatException e) {
+                    carteira = null;
+                    erroFormatoCarteira = "Informe um valor numérico válido";
+                }
+            } else {
+                carteira = 0f;
+            }
+
             switch (opcao) {
 
                 case "cadastrar":
@@ -136,6 +155,66 @@ response.setCharacterEncoding("UTF-8");
         }
     }
 
+    /**
+     * Valida os campos obrigatórios e verifica se já existe outro cliente
+     * cadastrado com o mesmo CPF/CNPJ. codigoAtual deve ser null ao
+     * cadastrar, e o código do cliente em edição ao alterar (para não
+     * acusar duplicidade contra o próprio registro).
+     */
+    private Map<String, String> validarCliente(Cliente cliente,
+            Integer codigoAtual) {
+
+        Map<String, String> erros = new HashMap<>();
+
+        if (cliente.getNome() == null || cliente.getNome().isBlank()) {
+            erros.put("nome", "Informação obrigatória");
+        }
+
+        if (cliente.getCpf() == null || cliente.getCpf().isBlank()) {
+            erros.put("cpf", "Informação obrigatória");
+        } else {
+
+            Cliente existente =
+                    objClienteDao.buscarClientePorCpf(cliente.getCpf().trim());
+
+            boolean pertenceAOutroCliente = existente != null &&
+                    (codigoAtual == null ||
+                     !existente.getCodigoCliente().equals(codigoAtual));
+
+            if (pertenceAOutroCliente) {
+                erros.put("cpf", "CPF(ou CNPJ) já cadastrado");
+            }
+        }
+
+        if (erroFormatoCarteira != null) {
+            erros.put("carteira", erroFormatoCarteira);
+        }
+
+        return erros;
+    }
+
+    /**
+     * Reexibe o formulário preenchido com o que o usuário digitou,
+     * destacando os campos com erro, sem gravar nada no banco.
+     */
+    private void reexibirComErros(HttpServletRequest request,
+            HttpServletResponse response,
+            Cliente cliente,
+            Map<String, String> erros,
+            String modoFormulario,
+            String opcaoFormulario)
+            throws ServletException, IOException {
+
+        request.setAttribute("errosCampo", erros);
+        request.setAttribute("mensagemErro",
+                "Não foi possível salvar. Verifique os campos destacados abaixo.");
+        request.setAttribute("clienteEdicao", cliente);
+        request.setAttribute("modoFormulario", modoFormulario);
+        request.setAttribute("opcao", opcaoFormulario);
+
+        encaminharParaPagina(request, response);
+    }
+
     private void cadastrar(HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
@@ -148,6 +227,15 @@ response.setCharacterEncoding("UTF-8");
         objCliente.setEmail(email);
         objCliente.setCidade(cidade);
         objCliente.setConvenio(convenio);
+        objCliente.setCarteira(carteira);
+
+        Map<String, String> erros = validarCliente(objCliente, null);
+
+        if (!erros.isEmpty()) {
+            reexibirComErros(request, response, objCliente, erros,
+                    "cadastrar", "cadastrar");
+            return;
+        }
 
         objClienteDao.salvar(objCliente);
 
@@ -181,6 +269,15 @@ response.setCharacterEncoding("UTF-8");
         objCliente.setEmail(email);
         objCliente.setCidade(cidade);
         objCliente.setConvenio(convenio);
+        objCliente.setCarteira(carteira);
+
+        Map<String, String> erros = validarCliente(objCliente, codigoCliente);
+
+        if (!erros.isEmpty()) {
+            reexibirComErros(request, response, objCliente, erros,
+                    "editar", "confirmarAlterar");
+            return;
+        }
 
         objClienteDao.alterar(objCliente);
 

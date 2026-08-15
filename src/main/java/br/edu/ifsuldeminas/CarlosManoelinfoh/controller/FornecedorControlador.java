@@ -12,7 +12,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(WebConstante.BASE_PATH + "/FornecedorControlador")
 public class FornecedorControlador extends HttpServlet {
@@ -106,6 +108,68 @@ response.setCharacterEncoding("UTF-8");  try {
         }
     }
 
+    /**
+     * Valida os campos obrigatórios e verifica se já existe outro
+     * fornecedor cadastrado com o mesmo CNPJ. codigoAtual deve ser null
+     * ao cadastrar, e o código do fornecedor em edição ao alterar.
+     */
+    private Map<String, String> validarFornecedor(Fornecedor fornecedor,
+            Integer codigoAtual) {
+
+        Map<String, String> erros = new HashMap<>();
+
+        if (fornecedor.getRazaoSocial() == null
+                || fornecedor.getRazaoSocial().isBlank()) {
+            erros.put("razaoSocial", "Informação obrigatória");
+        }
+
+        if (fornecedor.getCnpj() == null || fornecedor.getCnpj().isBlank()) {
+            erros.put("cnpj", "Informação obrigatória");
+        } else {
+
+            Fornecedor existente = objFornecedorDao.buscarFornecedorPorCnpj(
+                    fornecedor.getCnpj().trim());
+
+            boolean pertenceAOutroFornecedor = existente != null &&
+                    (codigoAtual == null ||
+                     !existente.getCodigoFornecedor().equals(codigoAtual));
+
+            if (pertenceAOutroFornecedor) {
+                erros.put("cnpj", "CPF(ou CNPJ) já cadastrado");
+            }
+        }
+
+        return erros;
+    }
+
+    private void reexibirComErros(HttpServletRequest request,
+            HttpServletResponse response,
+            Fornecedor fornecedor,
+            Map<String, String> erros,
+            String modoFormulario,
+            String opcaoFormulario)
+            throws ServletException, IOException {
+
+        request.setAttribute("errosCampo", erros);
+        request.setAttribute("mensagemErro",
+                "Não foi possível salvar. Verifique os campos destacados abaixo.");
+
+        request.setAttribute("codigoFornecedor", fornecedor.getCodigoFornecedor());
+        request.setAttribute("razaoSocial", fornecedor.getRazaoSocial());
+        request.setAttribute("nomeFantasia", fornecedor.getNomeFantasia());
+        request.setAttribute("cnpj", fornecedor.getCnpj());
+        request.setAttribute("telefone", fornecedor.getTelefone());
+        request.setAttribute("email", fornecedor.getEmail());
+        request.setAttribute("cidadeFuncionario",
+                fornecedor.getCidade() != null ? fornecedor.getCidade().getCodigoCidade() : null);
+
+        request.setAttribute("fornecedorEdicao", fornecedor);
+        request.setAttribute("modoFormulario", modoFormulario);
+        request.setAttribute("opcao", opcaoFormulario);
+
+        encaminharParaPagina(request, response);
+    }
+
     private void cadastrar(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
@@ -119,6 +183,14 @@ response.setCharacterEncoding("UTF-8");  try {
 
         if (cidade != null) {
             objFornecedor.setCidade(cidade);
+        }
+
+        Map<String, String> erros = validarFornecedor(objFornecedor, null);
+
+        if (!erros.isEmpty()) {
+            reexibirComErros(request, response, objFornecedor, erros,
+                    "cadastrar", "cadastrar");
+            return;
         }
 
         objFornecedorDao.salvar(objFornecedor);
@@ -166,6 +238,15 @@ response.setCharacterEncoding("UTF-8");  try {
 
         if (cidade != null) {
             objFornecedor.setCidade(cidade);
+        }
+
+        Map<String, String> erros =
+                validarFornecedor(objFornecedor, codigoFornecedor);
+
+        if (!erros.isEmpty()) {
+            reexibirComErros(request, response, objFornecedor, erros,
+                    "editar", "confirmarAlterar");
+            return;
         }
 
         objFornecedorDao.alterar(objFornecedor);

@@ -10,7 +10,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @WebServlet(WebConstante.BASE_PATH + "/FabricanteControlador")
 public class FabricanteControlador extends HttpServlet {
@@ -74,11 +76,77 @@ response.setCharacterEncoding("UTF-8");    try {
         }
     }
 
+    /**
+     * Valida os campos obrigatórios e verifica se já existe outro
+     * fabricante cadastrado com o mesmo CNPJ. cnpjAtual deve ser null (ou
+     * vazio) ao cadastrar, e o CNPJ original do fabricante em edição ao
+     * alterar (para não acusar duplicidade contra o próprio registro).
+     */
+    private Map<String, String> validarFabricante(Fabricante fabricante,
+            String cnpjAtual) {
+
+        Map<String, String> erros = new HashMap<>();
+
+        if (fabricante.getNome() == null || fabricante.getNome().isBlank()) {
+            erros.put("nome", "Informação obrigatória");
+        }
+
+        if (fabricante.getTelefone() == null || fabricante.getTelefone().isBlank()) {
+            erros.put("telefone", "Informação obrigatória");
+        }
+
+        if (fabricante.getEmail() == null || fabricante.getEmail().isBlank()) {
+            erros.put("email", "Informação obrigatória");
+        }
+
+        if (fabricante.getCnpj() == null || fabricante.getCnpj().isBlank()) {
+            erros.put("cnpj", "Informação obrigatória");
+        } else {
+
+            Fabricante existente = objFabricanteDao.buscarFabricantePorCnpj(
+                    fabricante.getCnpj().trim());
+
+            boolean pertenceAOutroFabricante = existente != null &&
+                    (cnpjAtual == null || cnpjAtual.isBlank() ||
+                     !existente.getCnpj().equals(cnpjAtual));
+
+            if (pertenceAOutroFabricante) {
+                erros.put("cnpj", "CPF(ou CNPJ) já cadastrado");
+            }
+        }
+
+        return erros;
+    }
+
+    private void reexibirComErros(HttpServletRequest request,
+            HttpServletResponse response,
+            Fabricante fabricante,
+            Map<String, String> erros,
+            String modoFormulario)
+            throws ServletException, IOException {
+
+        request.setAttribute("errosCampo", erros);
+        request.setAttribute("mensagemErro",
+                "Não foi possível salvar. Verifique os campos destacados abaixo.");
+        request.setAttribute("fabricanteEdicao", fabricante);
+        request.setAttribute("modoFormulario", modoFormulario);
+
+        encaminharParaPagina(request, response);
+    }
+
     private void cadastrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        objFabricante = new Fabricante();
         objFabricante.setNome(nome);
         objFabricante.setCnpj(cnpj);
         objFabricante.setTelefone(telefone);
         objFabricante.setEmail(email);
+
+        Map<String, String> erros = validarFabricante(objFabricante, null);
+
+        if (!erros.isEmpty()) {
+            reexibirComErros(request, response, objFabricante, erros, "cadastrar");
+            return;
+        }
 
         objFabricanteDao.salvar(objFabricante);
         request.setAttribute("mensagem", "Fabricante cadastrado com sucesso!");
@@ -100,11 +168,19 @@ response.setCharacterEncoding("UTF-8");    try {
     }
 
     private void confirmarAlterar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        objFabricante = new Fabricante();
         objFabricante.setCnpjOriginal(cnpjOriginal);
         objFabricante.setNome(nome);
         objFabricante.setCnpj(cnpj);
         objFabricante.setTelefone(telefone);
         objFabricante.setEmail(email);
+
+        Map<String, String> erros = validarFabricante(objFabricante, cnpjOriginal);
+
+        if (!erros.isEmpty()) {
+            reexibirComErros(request, response, objFabricante, erros, "editar");
+            return;
+        }
 
         objFabricanteDao.alterar(objFabricante);
         cancelar(request, response);

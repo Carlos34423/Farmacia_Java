@@ -17,6 +17,7 @@
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/ClienteControlador?opcao=cancelar">CLIENTE</a></li>
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/FuncionarioControlador?opcao=cancelar">FUNCIONARIO</a></li>
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/MedicamentoControlador?opcao=cancelar">MEDICAMENTO</a></li>
-                <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/CidadeControlador?opcao=cancelar">CIDADE</a></li>
+        <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/CompraRemedioControlador?opcao=cancelar">COMPRA DE REMÉDIO</a></li>
+        <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/CidadeControlador?opcao=cancelar">CIDADE</a></li>
     </ul>
 </nav>

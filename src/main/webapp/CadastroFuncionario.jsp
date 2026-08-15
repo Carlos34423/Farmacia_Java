@@ -25,6 +25,10 @@
             <div class="mensagem sucesso">${mensagem}</div>
         </c:if>
 
+        <c:if test="${not empty mensagemErro}">
+            <div class="mensagem erro">${mensagemErro}</div>
+        </c:if>
+
         <form class="formulario"
               method="get"
               action="${pageContext.request.contextPath}${URL_BASE}/FuncionarioControlador">
@@ -40,12 +44,20 @@
             <label>Nome</label>
             <input type="text"
                    name="nome"
+                   class="${not empty errosCampo.nome ? 'campo-invalido' : ''}"
                    value="${funcionarioEdicao.nome}">
+            <c:if test="${not empty errosCampo.nome}">
+                <span class="erro-campo">${errosCampo.nome}</span>
+            </c:if>
 
             <label>CPF</label>
             <input type="text"
                    name="cpf"
+                   class="${not empty errosCampo.cpf ? 'campo-invalido' : ''}"
                    value="${funcionarioEdicao.cpf}">
+            <c:if test="${not empty errosCampo.cpf}">
+                <span class="erro-campo">${errosCampo.cpf}</span>
+            </c:if>
 
             <label>Telefone</label>
             <input type="text"

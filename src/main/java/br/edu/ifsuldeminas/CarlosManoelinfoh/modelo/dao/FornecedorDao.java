@@ -70,4 +70,13 @@ public void excluir(Integer codigoFornecedor) {
         String sql = "SELECT * FROM fornecedor WHERE codigoFornecedor = ?";
         return buscarPorId(sql, new FornecedorRowMapper(), codigoFornecedor);
     }
+
+    /**
+     * Usado para verificar se já existe um fornecedor cadastrado com o
+     * mesmo CNPJ, antes de salvar ou alterar um registro.
+     */
+    public Fornecedor buscarFornecedorPorCnpj(String cnpj) {
+        String sql = "SELECT * FROM fornecedor WHERE cnpj = ?";
+        return buscarPorId(sql, new FornecedorRowMapper(), cnpj);
+    }
 }

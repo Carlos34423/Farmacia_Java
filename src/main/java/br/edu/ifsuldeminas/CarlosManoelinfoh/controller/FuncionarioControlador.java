@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(WebConstante.BASE_PATH + "/FuncionarioControlador")
 public class FuncionarioControlador extends HttpServlet {
@@ -124,6 +126,57 @@ response.setCharacterEncoding("UTF-8");
         }
     }
 
+    /**
+     * Valida os campos obrigatórios e verifica se já existe outro
+     * funcionário cadastrado com o mesmo CPF. codigoAtual deve ser null
+     * ao cadastrar, e o código do funcionário em edição ao alterar.
+     */
+    private Map<String, String> validarFuncionario(Funcionario funcionario,
+            Integer codigoAtual) {
+
+        Map<String, String> erros = new HashMap<>();
+
+        if (funcionario.getNome() == null || funcionario.getNome().isBlank()) {
+            erros.put("nome", "Informação obrigatória");
+        }
+
+        if (funcionario.getCpf() == null || funcionario.getCpf().isBlank()) {
+            erros.put("cpf", "Informação obrigatória");
+        } else {
+
+            Funcionario existente = objFuncionarioDao.buscarFuncionarioPorCpf(
+                    funcionario.getCpf().trim());
+
+            boolean pertenceAOutroFuncionario = existente != null &&
+                    (codigoAtual == null ||
+                     !existente.getCodigoFuncionario().equals(codigoAtual));
+
+            if (pertenceAOutroFuncionario) {
+                erros.put("cpf", "CPF(ou CNPJ) já cadastrado");
+            }
+        }
+
+        return erros;
+    }
+
+    private void reexibirComErros(HttpServletRequest request,
+            HttpServletResponse response,
+            Funcionario funcionario,
+            Map<String, String> erros,
+            String modoFormulario,
+            String opcaoFormulario)
+            throws ServletException, IOException {
+
+        request.setAttribute("errosCampo", erros);
+        request.setAttribute("mensagemErro",
+                "Não foi possível salvar. Verifique os campos destacados abaixo.");
+        request.setAttribute("funcionarioEdicao", funcionario);
+        request.setAttribute("modoFormulario", modoFormulario);
+        request.setAttribute("opcao", opcaoFormulario);
+
+        encaminharParaPagina(request, response);
+    }
+
     private void cadastrar(HttpServletRequest request,
             HttpServletResponse response)
             throws ServletException, IOException {
@@ -136,6 +189,14 @@ response.setCharacterEncoding("UTF-8");
         objFuncionario.setEmail(email);
         objFuncionario.setCargo(cargo);
         objFuncionario.setCidade(cidade);
+
+        Map<String, String> erros = validarFuncionario(objFuncionario, null);
+
+        if (!erros.isEmpty()) {
+            reexibirComErros(request, response, objFuncionario, erros,
+                    "cadastrar", "cadastrar");
+            return;
+        }
 
         objFuncionarioDao.salvar(objFuncionario);
 
@@ -172,6 +233,15 @@ response.setCharacterEncoding("UTF-8");
         objFuncionario.setEmail(email);
         objFuncionario.setCargo(cargo);
         objFuncionario.setCidade(cidade);
+
+        Map<String, String> erros =
+                validarFuncionario(objFuncionario, codigoFuncionario);
+
+        if (!erros.isEmpty()) {
+            reexibirComErros(request, response, objFuncionario, erros,
+                    "editar", "confirmarAlterar");
+            return;
+        }
 
         objFuncionarioDao.alterar(objFuncionario);
 

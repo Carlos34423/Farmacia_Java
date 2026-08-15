@@ -108,4 +108,18 @@ public class FuncionarioDao extends GenericoDAO<Funcionario> {
                 new FuncionarioRowMapper(),
                 codigoFuncionario);
     }
+
+    /**
+     * Usado para verificar se já existe um funcionário cadastrado com o
+     * mesmo CPF, antes de salvar ou alterar um registro.
+     */
+    public Funcionario buscarFuncionarioPorCpf(String cpf) {
+
+        String sql =
+            "SELECT * FROM funcionario WHERE cpf=?";
+
+        return buscarPorId(sql,
+                new FuncionarioRowMapper(),
+                cpf);
+    }
 }

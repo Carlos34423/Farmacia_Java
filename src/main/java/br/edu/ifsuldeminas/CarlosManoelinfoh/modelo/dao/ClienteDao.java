@@ -22,29 +22,31 @@ public class ClienteDao extends GenericoDAO<Cliente> {
     public void salvar(Cliente objCliente) {
 
         String sql =
-            "INSERT INTO cliente (nome,cpf,telefone,email,codigoCidade,codigoConvenio) VALUES(?,?,?,?,?,?)";
+            "INSERT INTO cliente (nome,cpf,telefone,email,codigoCidade,codigoConvenio,carteira) VALUES(?,?,?,?,?,?,?)";
 
         save(sql,
                 objCliente.getNome(),
                 objCliente.getCpf(),
                 objCliente.getTelefone(),
                 objCliente.getEmail(),
-                objCliente.getCidade().getCodigoCidade(),
-                objCliente.getConvenio().getCodigoConvenio());
+                objCliente.getCidade() != null ? objCliente.getCidade().getCodigoCidade() : null,
+                objCliente.getConvenio() != null ? objCliente.getConvenio().getCodigoConvenio() : null,
+                objCliente.getCarteira());
     }
 
     public void alterar(Cliente objCliente) {
 
         String sql =
-            "UPDATE cliente SET nome=?, cpf=?, telefone=?, email=?, codigoCidade=?, codigoConvenio=? WHERE codigoCliente=?";
+            "UPDATE cliente SET nome=?, cpf=?, telefone=?, email=?, codigoCidade=?, codigoConvenio=?, carteira=? WHERE codigoCliente=?";
 
         save(sql,
                 objCliente.getNome(),
                 objCliente.getCpf(),
                 objCliente.getTelefone(),
                 objCliente.getEmail(),
-                objCliente.getCidade().getCodigoCidade(),
-                objCliente.getConvenio().getCodigoConvenio(),
+                objCliente.getCidade() != null ? objCliente.getCidade().getCodigoCidade() : null,
+                objCliente.getConvenio() != null ? objCliente.getConvenio().getCodigoConvenio() : null,
+                objCliente.getCarteira(),
                 objCliente.getCodigoCliente());
     }
 
@@ -80,6 +82,9 @@ public class ClienteDao extends GenericoDAO<Cliente> {
                     convenioDao.buscarConvenioPorId(
                             rs.getInt("codigoConvenio")));
 
+            float carteira = rs.getFloat("carteira");
+            objCliente.setCarteira(rs.wasNull() ? null : carteira);
+
             return objCliente;
         }
     }
@@ -101,4 +106,19 @@ public class ClienteDao extends GenericoDAO<Cliente> {
                 new ClienteRowMapper(),
                 codigoCliente);
     }
+
+    /**
+     * Usado para verificar se já existe um cliente cadastrado com o mesmo
+     * CPF/CNPJ, antes de salvar ou alterar um registro.
+     */
+    public Cliente buscarClientePorCpf(String cpf) {
+
+        String sql =
+                "SELECT * FROM cliente WHERE cpf=?";
+
+        return buscarPorId(sql,
+                new ClienteRowMapper(),
+                cpf);
+    }
+
 }

@@ -102,11 +102,29 @@ button,
 
 .sucesso {
     background: #dff0d8;
+    border: 1px solid #c3e6cb;
+}
+
+.mensagem.erro {
+    background: #f8d7da;
+    border: 1px solid #f5c2c7;
 }
 
 .erro,
 .excluir {
     color: #b00020;
+}
+
+.campo-invalido {
+    border: 2px solid #b00020;
+    background: #fff5f5;
+}
+
+.erro-campo {
+    display: block;
+    margin-top: -6px;
+    color: #b00020;
+    font-size: 0.85em;
 }
 
 .tabela {

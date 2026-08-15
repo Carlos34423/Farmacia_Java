@@ -20,6 +20,7 @@ br\edu\ifsuldeminas\CarlosManoelinfoh\modelo\entity\Fornecedor.class
 br\edu\ifsuldeminas\CarlosManoelinfoh\modelo\dao\FornecedorDao.class
 br\edu\ifsuldeminas\CarlosManoelinfoh\modelo\dao\FornecedorDao$FornecedorRowMapper.class
 br\edu\ifsuldeminas\CarlosManoelinfoh\modelo\entity\Cliente.class
+br\edu\ifsuldeminas\CarlosManoelinfoh\controller\CompraRemedioControlador.class
 br\edu\ifsuldeminas\CarlosManoelinfoh\modelo\dao\FormaPagamentoDao.class
 br\edu\ifsuldeminas\CarlosManoelinfoh\controller\FornecedorControlador.class
 br\edu\ifsuldeminas\CarlosManoelinfoh\resources\JakartaEE10Resource.class

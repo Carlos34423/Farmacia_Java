@@ -43,7 +43,11 @@
             <label>Razão Social</label>
             <input type="text"
                    name="razaoSocial"
+                   class="${not empty errosCampo.razaoSocial ? 'campo-invalido' : ''}"
                    value="${razaoSocial}">
+            <c:if test="${not empty errosCampo.razaoSocial}">
+                <span class="erro-campo">${errosCampo.razaoSocial}</span>
+            </c:if>
 
             <label>Nome Fantasia</label>
             <input type="text"
@@ -53,7 +57,11 @@
             <label>CNPJ</label>
             <input type="text"
                    name="cnpj"
+                   class="${not empty errosCampo.cnpj ? 'campo-invalido' : ''}"
                    value="${cnpj}">
+            <c:if test="${not empty errosCampo.cnpj}">
+                <span class="erro-campo">${errosCampo.cnpj}</span>
+            </c:if>
 
             <label>Telefone</label>
             <input type="text"

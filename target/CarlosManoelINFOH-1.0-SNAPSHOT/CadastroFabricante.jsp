@@ -25,16 +25,36 @@
                     <input type="hidden" name="cnpjOriginal" value="${fabricanteEdicao.cnpjOriginal}">
 
                     <label for="nome">Nome</label>
-                    <input id="nome" type="text" name="nome" maxlength="120" required value="${fabricanteEdicao.nome}">
+                    <input id="nome" type="text" name="nome" maxlength="120"
+                           class="${not empty errosCampo.nome ? 'campo-invalido' : ''}"
+                           value="${fabricanteEdicao.nome}">
+                    <c:if test="${not empty errosCampo.nome}">
+                        <span class="erro-campo">${errosCampo.nome}</span>
+                    </c:if>
 
                     <label for="cnpj">CNPJ</label>
-                    <input id="cnpj" type="text" name="cnpj" maxlength="18" required value="${fabricanteEdicao.cnpj}">
+                    <input id="cnpj" type="text" name="cnpj" maxlength="18"
+                           class="${not empty errosCampo.cnpj ? 'campo-invalido' : ''}"
+                           value="${fabricanteEdicao.cnpj}">
+                    <c:if test="${not empty errosCampo.cnpj}">
+                        <span class="erro-campo">${errosCampo.cnpj}</span>
+                    </c:if>
 
                     <label for="telefone">Telefone</label>
-                    <input id="telefone" type="text" name="telefone" maxlength="20" required value="${fabricanteEdicao.telefone}">
+                    <input id="telefone" type="text" name="telefone" maxlength="20"
+                           class="${not empty errosCampo.telefone ? 'campo-invalido' : ''}"
+                           value="${fabricanteEdicao.telefone}">
+                    <c:if test="${not empty errosCampo.telefone}">
+                        <span class="erro-campo">${errosCampo.telefone}</span>
+                    </c:if>
 
                     <label for="email">Email</label>
-                    <input id="email" type="email" name="email" maxlength="120" required value="${fabricanteEdicao.email}">
+                    <input id="email" type="email" name="email" maxlength="120"
+                           class="${not empty errosCampo.email ? 'campo-invalido' : ''}"
+                           value="${fabricanteEdicao.email}">
+                    <c:if test="${not empty errosCampo.email}">
+                        <span class="erro-campo">${errosCampo.email}</span>
+                    </c:if>
 
                     <div class="acoes-formulario">
                         <button class="botao" type="submit">${modoFormulario eq 'editar' ? 'Salvar alteracoes' : 'Cadastrar'}</button>

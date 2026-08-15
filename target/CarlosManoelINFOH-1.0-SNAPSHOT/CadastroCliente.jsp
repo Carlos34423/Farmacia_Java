@@ -43,12 +43,20 @@
             <label>Nome</label>
             <input type="text"
                    name="nome"
+                   class="${not empty errosCampo.nome ? 'campo-invalido' : ''}"
                    value="${clienteEdicao.nome}">
+            <c:if test="${not empty errosCampo.nome}">
+                <span class="erro-campo">${errosCampo.nome}</span>
+            </c:if>
 
             <label>CPF</label>
             <input type="text"
                    name="cpf"
+                   class="${not empty errosCampo.cpf ? 'campo-invalido' : ''}"
                    value="${clienteEdicao.cpf}">
+            <c:if test="${not empty errosCampo.cpf}">
+                <span class="erro-campo">${errosCampo.cpf}</span>
+            </c:if>
 
             <label>Telefone</label>
             <input type="text"
@@ -59,6 +67,15 @@
             <input type="text"
                    name="email"
                    value="${clienteEdicao.email}">
+
+            <label>Carteira (R$)</label>
+            <input type="text"
+                   name="carteira"
+                   class="${not empty errosCampo.carteira ? 'campo-invalido' : ''}"
+                   value="${clienteEdicao.carteira}">
+            <c:if test="${not empty errosCampo.carteira}">
+                <span class="erro-campo">${errosCampo.carteira}</span>
+            </c:if>
 
             <label>Cidade</label>
 
@@ -122,6 +139,7 @@
                     <th>Email</th>
                     <th>Cidade</th>
                     <th>Convênio</th>
+                    <th>Carteira (R$)</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -139,6 +157,7 @@
                         <td>${cliente.email}</td>
                         <td>${cliente.cidade.nome}</td>
                         <td>${cliente.convenio.nome}</td>
+                        <td>${cliente.carteira}</td>
 
                         <td class="acoes-tabela">
 
@@ -161,7 +180,7 @@
 
                 <c:if test="${empty clientes}">
                     <tr>
-                        <td colspan="8">
+                        <td colspan="9">
                             Nenhum cliente cadastrado ainda.
                         </td>
                     </tr>
