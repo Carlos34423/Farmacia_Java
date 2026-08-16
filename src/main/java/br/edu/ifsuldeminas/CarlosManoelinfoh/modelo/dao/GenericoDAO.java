@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package br.edu.ifsuldeminas.CarlosManoelinfoh.modelo.dao;
 
 import java.sql.Connection;
@@ -23,9 +20,7 @@ public class GenericoDAO<T> {
         return lastId;
     }
     private  ConnectionFactory connectionFactory = ConnectionFactory.getIntance();
-/*Método para inserir,atualizar e excluir registros no banco de dados. Ele aceita uma string SQL e um número variável 
- de parâmetros que são usados para preencher a consulta. O método trata exceções, gerencia recursos e fornece 
-    feedback sobre o sucesso da operação.*/
+
     public void save(String comandoSql, Object... parametros) {
         Connection con = null;
         PreparedStatement pstmt = null;
@@ -40,21 +35,12 @@ public class GenericoDAO<T> {
                     pstmt.setObject(i + 1, parametros[i]);
                 }
             }
-            /*
-            if (pstmt.executeUpdate() > 0) {
-                  ResultSet rs = pstmt.getGeneratedKeys();// retorna o último idCaixa cadastrado
-                if (rs.next()) {
-                    lastId = rs.getInt(1); //armazena o último id cadastrado
-                }
-                System.out.println("SAVE SUCESSO!");
-            } else {
-                System.out.println("SAVE NÃO EXECUTOU!");
-            }*/
+
              int affectedRows = pstmt.executeUpdate();
         if (affectedRows > 0) {
-            ResultSet rs = pstmt.getGeneratedKeys(); // Retorna o último ID gerado
+            ResultSet rs = pstmt.getGeneratedKeys();
             if (rs.next()) {
-                lastId = rs.getInt(1); // Armazena o último ID gerado
+                lastId = rs.getInt(1); 
                 System.out.println("Ultimo id gerado: "+lastId);
             }
             System.out.println("SAVE SUCESSO!");
@@ -74,9 +60,7 @@ public class GenericoDAO<T> {
             }
         }
     }
-/*public List<T> buscarTodos(String comandoSql, RowMapper<T> rowMapper): Método para recuperar uma lista 
-    de objetos de um tipo específico (T) do banco de dados. Utiliza uma interface RowMapper para mapear
-    linhas do ResultSet para objetos de tipo T.*/
+
     public List<T> buscarTodos(String comandoSql, RowMapper<T> rowMapper) {
         List<T> entidades = new ArrayList<>();
         Connection con = null;
@@ -102,8 +86,7 @@ public class GenericoDAO<T> {
         }
         return entidades;
     }
-/*Método para buscar um único registro pelo ID ou outros critérios, retornando um objeto do tipo T. 
-    Similar ao método save, ele aceita uma consulta SQL e parâmetros que preenchem a consulta.*/
+
     public T buscarPorId(String comandoSql, RowMapper<T> rowMapper, Object... parametros) {
         T entidade = null;
         Connection con = null;
@@ -133,15 +116,3 @@ public class GenericoDAO<T> {
         return entidade;
     }
 }
-
-/*Funcionalidades Reutilização e Flexibilidade: A classe é genérica, permitindo sua reutilização para qualquer tipo de 
-entidade. Isso é feito através do uso de genéricos e mapeadores de linha (RowMapper), que isolam o código SQL e a lógica 
-de mapeamento dos detalhes de implementação da classe DAO.
-Gerenciamento de Conexão Eficiente: Utilizando ConnectionFactory, a classe GenericoDAO<T> centraliza a gestão da conexão, 
-reduzindo a duplicação de código e aumentando a eficiência.
-Segurança de Dados: Ao usar PreparedStatement, a classe minimiza os riscos de injeção de SQL, uma vez que os parâmetros 
-são vinculados à consulta de maneira segura.
-Tratamento de Exceções e Recursos: A classe implementa blocos try-catch-finally para garantir que todas as conexões, 
-declarações e conjuntos de resultados sejam fechados corretamente, mesmo em caso de erro, evitando vazamentos de recursos.
-Esta classe é um exemplo robusto de como uma DAO genérica pode ser estruturada em Java para facilitar a manutenção, 
-reutilização e segurança em aplicações que interagem com bancos de dados.*/

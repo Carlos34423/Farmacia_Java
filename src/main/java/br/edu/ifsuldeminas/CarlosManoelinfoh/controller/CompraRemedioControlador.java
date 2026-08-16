@@ -19,16 +19,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Registra a compra de um medicamento por um cliente.
- *
- * A cada compra confirmada, dois registros já existentes no banco são
- * atualizados no mesmo processo: o campo "carteira" do cliente (é
- * descontado o valor da compra) e o campo "quantidadeEstoque" do
- * medicamento (é descontada a quantidade comprada). Não são criadas
- * tabelas novas — usa somente ClienteDao e MedicamentoDao, que já
- * existem no projeto.
- */
 @WebServlet(WebConstante.BASE_PATH + "/CompraRemedioControlador")
 public class CompraRemedioControlador extends HttpServlet {
 
@@ -98,12 +88,6 @@ public class CompraRemedioControlador extends HttpServlet {
         }
     }
 
-    /**
-     * Valida os campos obrigatórios da compra (cliente, medicamento e
-     * quantidade) e devolve os erros encontrados. A validação de saldo
-     * e de estoque é feita à parte, em comprar(), pois depende dos
-     * registros já terem sido localizados no banco.
-     */
     private Map<String, String> validarCompra(Cliente cliente,
             Medicamento medicamento, Integer quantidade) {
 
@@ -189,9 +173,6 @@ public class CompraRemedioControlador extends HttpServlet {
             return;
         }
 
-        //==============================
-        // ATUALIZA A CARTEIRA DO CLIENTE
-        //==============================
         Float saldoAtual = cliente.getCarteira() != null
                 ? cliente.getCarteira() : 0f;
 
@@ -199,9 +180,6 @@ public class CompraRemedioControlador extends HttpServlet {
 
         objClienteDao.alterar(cliente);
 
-        //==============================
-        // ATUALIZA O ESTOQUE DO MEDICAMENTO
-        //==============================
         medicamento.setQuantidadeEstoque(
                 medicamento.getQuantidadeEstoque() - quantidade);
 

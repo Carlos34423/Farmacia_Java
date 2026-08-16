@@ -108,11 +108,6 @@ response.setCharacterEncoding("UTF-8");  try {
         }
     }
 
-    /**
-     * Valida os campos obrigatórios e verifica se já existe outro
-     * fornecedor cadastrado com o mesmo CNPJ. codigoAtual deve ser null
-     * ao cadastrar, e o código do fornecedor em edição ao alterar.
-     */
     private Map<String, String> validarFornecedor(Fornecedor fornecedor,
             Integer codigoAtual) {
 

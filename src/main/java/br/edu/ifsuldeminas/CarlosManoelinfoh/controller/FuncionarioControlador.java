@@ -126,11 +126,7 @@ response.setCharacterEncoding("UTF-8");
         }
     }
 
-    /**
-     * Valida os campos obrigatórios e verifica se já existe outro
-     * funcionário cadastrado com o mesmo CPF. codigoAtual deve ser null
-     * ao cadastrar, e o código do funcionário em edição ao alterar.
-     */
+
     private Map<String, String> validarFuncionario(Funcionario funcionario,
             Integer codigoAtual) {
 

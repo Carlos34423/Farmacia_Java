@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package br.edu.ifsuldeminas.CarlosManoelinfoh.modelo.dao;
 
 import br.edu.ifsuldeminas.CarlosManoelinfoh.modelo.entity.Funcionario;
@@ -109,10 +106,6 @@ public class FuncionarioDao extends GenericoDAO<Funcionario> {
                 codigoFuncionario);
     }
 
-    /**
-     * Usado para verificar se já existe um funcionário cadastrado com o
-     * mesmo CPF, antes de salvar ou alterar um registro.
-     */
     public Funcionario buscarFuncionarioPorCpf(String cpf) {
 
         String sql =

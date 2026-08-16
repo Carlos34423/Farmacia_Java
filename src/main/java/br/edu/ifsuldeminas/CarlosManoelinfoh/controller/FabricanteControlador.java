@@ -76,12 +76,6 @@ response.setCharacterEncoding("UTF-8");    try {
         }
     }
 
-    /**
-     * Valida os campos obrigatórios e verifica se já existe outro
-     * fabricante cadastrado com o mesmo CNPJ. cnpjAtual deve ser null (ou
-     * vazio) ao cadastrar, e o CNPJ original do fabricante em edição ao
-     * alterar (para não acusar duplicidade contra o próprio registro).
-     */
     private Map<String, String> validarFabricante(Fabricante fabricante,
             String cnpjAtual) {
 

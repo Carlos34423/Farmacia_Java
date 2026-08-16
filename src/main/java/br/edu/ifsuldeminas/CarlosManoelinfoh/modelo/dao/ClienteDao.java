@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package br.edu.ifsuldeminas.CarlosManoelinfoh.modelo.dao;
 
 import br.edu.ifsuldeminas.CarlosManoelinfoh.modelo.entity.Cliente;
@@ -107,10 +104,6 @@ public class ClienteDao extends GenericoDAO<Cliente> {
                 codigoCliente);
     }
 
-    /**
-     * Usado para verificar se já existe um cliente cadastrado com o mesmo
-     * CPF/CNPJ, antes de salvar ou alterar um registro.
-     */
     public Cliente buscarClientePorCpf(String cpf) {
 
         String sql =

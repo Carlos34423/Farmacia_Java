@@ -9,7 +9,7 @@ public class Fornecedor {
     private String telefone;
     private String email;
 
-     private Cidade cidade = new Cidade();//relacionamento
+     private Cidade cidade = new Cidade();
      
     public Integer getCodigoFornecedor() {
         return codigoFornecedor;

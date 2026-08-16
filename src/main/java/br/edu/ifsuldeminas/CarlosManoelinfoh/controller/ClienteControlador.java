@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package br.edu.ifsuldeminas.CarlosManoelinfoh.controller;
 
 import br.edu.ifsuldeminas.CarlosManoelinfoh.modelo.dao.CidadeDao;
@@ -155,12 +152,6 @@ response.setCharacterEncoding("UTF-8");
         }
     }
 
-    /**
-     * Valida os campos obrigatórios e verifica se já existe outro cliente
-     * cadastrado com o mesmo CPF/CNPJ. codigoAtual deve ser null ao
-     * cadastrar, e o código do cliente em edição ao alterar (para não
-     * acusar duplicidade contra o próprio registro).
-     */
     private Map<String, String> validarCliente(Cliente cliente,
             Integer codigoAtual) {
 
@@ -193,10 +184,6 @@ response.setCharacterEncoding("UTF-8");
         return erros;
     }
 
-    /**
-     * Reexibe o formulário preenchido com o que o usuário digitou,
-     * destacando os campos com erro, sem gravar nada no banco.
-     */
     private void reexibirComErros(HttpServletRequest request,
             HttpServletResponse response,
             Cliente cliente,

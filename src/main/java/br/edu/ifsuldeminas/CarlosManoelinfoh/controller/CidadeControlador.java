@@ -16,11 +16,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-/**
- *
- * @author Tulio Dias
- */
-// designar uma classe como um servlets, mapeamento de URL no Servidor WEB (GlassFish)
 @WebServlet(WebConstante.BASE_PATH + "/CidadeControlador")
 
 public class CidadeControlador extends HttpServlet {
