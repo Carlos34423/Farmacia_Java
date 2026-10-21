@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -19,5 +20,18 @@
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/MedicamentoControlador?opcao=cancelar">MEDICAMENTO</a></li>
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/CompraRemedioControlador?opcao=cancelar">COMPRA DE REMÉDIO</a></li>
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/CidadeControlador?opcao=cancelar">CIDADE</a></li>
+
+        <c:choose>
+            <c:when test="${empty sessionScope.usuarioLogado}">
+                <li>
+                    <a href="${pageContext.request.contextPath}/login.jsp">LOGIN</a>
+                </li>
+            </c:when>
+            <c:otherwise>
+                <li>
+                    <a href="${pageContext.request.contextPath}${URL_BASE}/LoginControlador">LOGOUT</a>
+                </li>
+            </c:otherwise>
+        </c:choose>
     </ul>
 </nav>
