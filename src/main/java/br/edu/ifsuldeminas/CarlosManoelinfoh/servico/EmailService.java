@@ -18,7 +18,7 @@ public class EmailService {
             "carlosmanoel2ss9@gmail.com";
 
     private static final String REMETENTE_SENHA =
-            "cxww qgdq tgrr zjoy";
+            "anyo ktkz hiwq qlvf";
 
     public static void enviarEmailRecuperacao(
             String destinatario, String linkRecuperacao) {

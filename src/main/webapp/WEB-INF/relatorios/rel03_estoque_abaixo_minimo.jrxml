@@ -1,0 +1,148 @@
+<jasperReport name="rel03_estoque_abaixo_minimo" language="java" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="28" uuid="9f43e151-efa9-4599-8830-4f072fa11291">
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<style name="Zebra" mode="Opaque" fontName="DejaVu Sans">
+		<conditionalStyle mode="Opaque" backcolor="#EEF4F7">
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2==0]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<query language="sql"><![CDATA[SELECT COALESCE(f.nomeFantasia,'(sem fornecedor)') AS fornecedor,
+       m.nome AS medicamento,
+       c.nome AS categoria,
+       m.quantidadeEstoque AS estoque,
+       m.estoqueMinimo AS minimo,
+       CAST(m.estoqueMinimo - m.quantidadeEstoque AS SIGNED) AS faltante
+FROM medicamento m
+LEFT JOIN fornecedor f ON f.codigoFornecedor=m.codigoFornecedor
+LEFT JOIN CategoriaMedicamento c ON c.codigoCategoriaMedicamento=m.codigoCategoriaMedicamento
+WHERE m.quantidadeEstoque < m.estoqueMinimo
+ORDER BY fornecedor, faltante DESC]]></query>
+	<field name="fornecedor" class="java.lang.String"/>
+	<field name="medicamento" class="java.lang.String"/>
+	<field name="categoria" class="java.lang.String"/>
+	<field name="estoque" class="java.lang.Integer"/>
+	<field name="minimo" class="java.lang.Integer"/>
+	<field name="faltante" class="java.lang.Long"/>
+	<variable name="TOT_REPOR" calculation="Sum" class="java.lang.Long">
+		<expression><![CDATA[$F{faltante}]]></expression>
+	</variable>
+	<variable name="TOT_ITENS" calculation="Sum" class="java.lang.Integer">
+		<expression><![CDATA[1]]></expression>
+	</variable>
+	<group name="Fornecedor">
+		<expression><![CDATA[$F{fornecedor}]]></expression>
+		<groupHeader>
+			<band height="24">
+				<element kind="textField" uuid="a2144722-fe1a-41c3-95c0-2affc94e52ae" mode="Opaque" x="0" y="2" width="555" height="20" forecolor="#000000" backcolor="#D9E8EE" fontName="DejaVu Sans" fontSize="10.0" blankWhenNull="true" bold="true" hTextAlign="Left" vTextAlign="Middle">
+					<expression><![CDATA["Fornecedor: " + $F{fornecedor}]]></expression>
+					<box leftPadding="4" rightPadding="4"/>
+				</element>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="22">
+				<element kind="staticText" uuid="c2442d4b-4c26-48ad-ab5f-6dbb2b577c3c" x="0" y="2" width="445" height="18" forecolor="#000000" fontName="DejaVu Sans" fontSize="8.0" bold="false" hTextAlign="Right" vTextAlign="Middle">
+					<text><![CDATA[Itens a repor deste fornecedor:]]></text>
+					<box leftPadding="4" rightPadding="4"/>
+				</element>
+				<element kind="textField" uuid="b0b22e5d-887c-4cff-878a-83c4d71a5b54" x="445" y="2" width="110" height="18" forecolor="#000000" fontName="DejaVu Sans" fontSize="8.0" pattern="0" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+					<expression><![CDATA[$V{Fornecedor_COUNT}]]></expression>
+					<box leftPadding="4" rightPadding="4"/>
+				</element>
+			</band>
+		</groupFooter>
+	</group>
+	<title height="70">
+		<element kind="rectangle" uuid="e41ca196-bc83-4066-8225-5efcf78c4de4" mode="Opaque" x="0" y="0" width="555" height="62" backcolor="#1F6F8B">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="b48eeff7-0645-4b09-94ac-23960a718704" x="10" y="6" width="535" height="30" forecolor="#FFFFFF" fontName="DejaVu Sans" fontSize="18.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Estoque Abaixo do Mínimo]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="8e6b8aaf-cf7c-4466-8572-a6061624df33" x="10" y="36" width="535" height="22" forecolor="#FFFFFF" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA["Itens com estoque menor que o mínimo, agrupados por fornecedor (base para pedidos de compra)"]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</title>
+	<columnHeader height="24">
+		<element kind="staticText" uuid="42427edb-22e5-48e6-9ed4-65e91e3c3c87" mode="Opaque" x="0" y="0" width="215" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Medicamento]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="656de32c-f598-488c-8705-567555e2d894" mode="Opaque" x="215" y="0" width="130" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Categoria]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="1f29802b-0c6b-484a-ab7f-a013fb61e53a" mode="Opaque" x="345" y="0" width="70" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Estoque]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="4d0cfb25-5e2e-4834-b457-3725d417d683" mode="Opaque" x="415" y="0" width="70" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Mínimo]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="fd4c8866-d736-405c-ac8a-46db77c88454" mode="Opaque" x="485" y="0" width="70" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Repor]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" uuid="9a439288-e0f6-45e8-b7ef-e138a24ef7d3" x="0" y="0" width="215" height="20" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{medicamento}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="97270854-f63a-4f90-871b-0983b32b53fc" x="215" y="0" width="130" height="20" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{categoria}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="febbe9d2-6972-4768-9889-9db3497225fa" x="345" y="0" width="70" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="#,##0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{estoque}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="0d8dc553-cdab-4016-8875-c353a99be51c" x="415" y="0" width="70" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="#,##0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{minimo}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="814517cb-a7c2-4bc2-b4ff-6cbf8364f818" x="485" y="0" width="70" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="#,##0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{faltante}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="22">
+		<element kind="textField" uuid="83578f60-c2b1-451b-a0fd-e740562976c5" x="0" y="2" width="300" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA["Gerado em " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date())]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="4a86d2b8-9176-42b7-bda0-6e765107fd51" x="405" y="2" width="120" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="d8445c05-fe30-4e1a-92cd-61e07f04124c" x="525" y="2" width="30" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" evaluationTime="Report" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</pageFooter>
+	<summary height="32">
+		<element kind="staticText" uuid="317c090e-80cc-4116-a55e-8e2c8832ee7a" x="0" y="4" width="300" height="22" forecolor="#000000" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[TOTAL DE ITENS CRÍTICOS / UNIDADES A REPOR]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="7acec422-ba2b-429e-a3f8-27e95484851f" x="300" y="4" width="185" height="22" forecolor="#000000" fontName="DejaVu Sans" fontSize="9.0" pattern="0" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{TOT_ITENS}]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="043218d4-2cfe-48b1-9cac-fa27a69a6e1e" x="485" y="4" width="70" height="22" forecolor="#000000" fontName="DejaVu Sans" fontSize="9.0" pattern="#,##0" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{TOT_REPOR}]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</summary>
+	<noData height="60">
+		<element kind="textField" uuid="1062392f-f916-4ba1-bbc0-aa3e653f433f" x="0" y="10" width="555" height="40" forecolor="#B00020" fontName="DejaVu Sans" fontSize="12.0" blankWhenNull="true" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA["Nenhum dado encontrado para os filtros informados."]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</noData>
+</jasperReport>

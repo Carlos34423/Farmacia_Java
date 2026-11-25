@@ -1,0 +1,128 @@
+<jasperReport name="rel02_top10_medicamentos" language="java" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="28" uuid="b4756e08-a09c-4096-8ed3-58c62ad25c75">
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<style name="Zebra" mode="Opaque" fontName="DejaVu Sans">
+		<conditionalStyle mode="Opaque" backcolor="#EEF4F7">
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2==0]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<parameter name="DATA_INICIAL" class="java.util.Date"/>
+	<parameter name="DATA_FINAL" class="java.util.Date"/>
+	<query language="sql"><![CDATA[SELECT m.nome AS medicamento,
+       CAST(SUM(i.quantidade) AS SIGNED) AS unidades,
+       CAST(SUM(i.quantidade*i.precoUnitario) AS DECIMAL(12,2)) AS receita
+FROM itemVenda i
+JOIN venda v ON v.codigoVenda=i.codigoVenda
+JOIN medicamento m ON m.codigoMedicamento=i.codigoMedicamento
+WHERE v.dataVenda BETWEEN $P{DATA_INICIAL} AND $P{DATA_FINAL}
+GROUP BY m.codigoMedicamento, m.nome
+ORDER BY unidades DESC, receita DESC
+LIMIT 10]]></query>
+	<field name="medicamento" class="java.lang.String"/>
+	<field name="unidades" class="java.lang.Long"/>
+	<field name="receita" class="java.math.BigDecimal"/>
+	<variable name="TOT_UN" calculation="Sum" class="java.lang.Long">
+		<expression><![CDATA[$F{unidades}]]></expression>
+	</variable>
+	<variable name="TOT_REC" calculation="Sum" class="java.math.BigDecimal">
+		<expression><![CDATA[$F{receita}]]></expression>
+	</variable>
+	<title height="270">
+		<element kind="rectangle" uuid="bcfb3e9c-d571-4bf3-badf-89131860e186" mode="Opaque" x="0" y="0" width="555" height="62" backcolor="#1F6F8B">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="04c9186e-8484-46e9-b8de-c5bfa643d8c6" x="10" y="6" width="535" height="30" forecolor="#FFFFFF" fontName="DejaVu Sans" fontSize="18.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Top 10 Medicamentos Mais Vendidos]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="8336f299-33c6-47ca-98a2-1e6ff325421e" x="10" y="36" width="535" height="22" forecolor="#FFFFFF" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA["Período: " + new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{DATA_INICIAL}) + " a " + new java.text.SimpleDateFormat("dd/MM/yyyy").format($P{DATA_FINAL})]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="chart" chartType="bar" uuid="1ee28618-57d6-4386-a226-e563ba441fd1" x="0" y="72" width="555" height="190" showLegend="false" evaluationTime="Report">
+			<titleExpression><![CDATA["Unidades vendidas por medicamento"]]></titleExpression>
+			<dataset kind="category">
+				<series>
+					<seriesExpression><![CDATA["Unidades"]]></seriesExpression>
+					<categoryExpression><![CDATA[$F{medicamento}]]></categoryExpression>
+					<valueExpression><![CDATA[$F{unidades}]]></valueExpression>
+				</series>
+			</dataset>
+			<plot showLabels="true">
+				<itemLabel/>
+			</plot>
+		</element>
+	</title>
+	<columnHeader height="24">
+		<element kind="staticText" uuid="b43d0930-c23f-4187-a630-cbc554c88bcd" mode="Opaque" x="0" y="0" width="40" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[#]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="31b42bad-f32e-4b11-b75b-1a3527f8a75e" mode="Opaque" x="40" y="0" width="275" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Medicamento]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="7b870800-fadb-4003-8b29-5601409a7af2" mode="Opaque" x="315" y="0" width="120" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Unidades vendidas]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="eb47fc62-4a38-4d5a-aeaf-676c80c071f7" mode="Opaque" x="435" y="0" width="120" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Receita]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" uuid="dca43784-7e0d-43cf-be90-72a61f8b5bd3" x="0" y="0" width="40" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="0" blankWhenNull="true" bold="false" hTextAlign="Center" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$V{REPORT_COUNT}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="310e5f1b-ea80-414f-878a-1a7038de7add" x="40" y="0" width="275" height="20" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{medicamento}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="bf63173c-b35e-44ee-a936-08b55804eb10" x="315" y="0" width="120" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="#,##0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{unidades}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="1a16fd72-62e3-4742-8346-670d4f44e580" x="435" y="0" width="120" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="'R$ '#,##0.00" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{receita}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="22">
+		<element kind="textField" uuid="7f1144cb-5af1-4a57-a78b-cba1793e2ae2" x="0" y="2" width="300" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA["Gerado em " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date())]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="064685f1-2ae2-452c-a7e2-4a1cea0a23b1" x="405" y="2" width="120" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="d03209c9-5506-4bd7-af5a-d40660f29d7b" x="525" y="2" width="30" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" evaluationTime="Report" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</pageFooter>
+	<summary height="32">
+		<element kind="staticText" uuid="e354767c-7671-4a90-bd48-5859fdbb2c3d" x="0" y="4" width="315" height="22" forecolor="#000000" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[TOTAL DO TOP 10]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="dac69d4f-6ba8-4039-92b8-be83a1062db3" x="315" y="4" width="120" height="22" forecolor="#000000" fontName="DejaVu Sans" fontSize="9.0" pattern="#,##0" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{TOT_UN}]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="6e983d4d-e1a6-4ec6-b7ff-930b296ee5d2" x="435" y="4" width="120" height="22" forecolor="#000000" fontName="DejaVu Sans" fontSize="9.0" pattern="'R$ '#,##0.00" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{TOT_REC}]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</summary>
+	<noData height="60">
+		<element kind="textField" uuid="1183eed3-4d2e-47ce-b089-e6f23be2a414" x="0" y="10" width="555" height="40" forecolor="#B00020" fontName="DejaVu Sans" fontSize="12.0" blankWhenNull="true" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA["Nenhum dado encontrado para os filtros informados."]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</noData>
+</jasperReport>

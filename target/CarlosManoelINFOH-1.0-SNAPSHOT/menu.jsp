@@ -20,6 +20,9 @@
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/MedicamentoControlador?opcao=cancelar">MEDICAMENTO</a></li>
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/CompraRemedioControlador?opcao=cancelar">COMPRA DE REMÉDIO</a></li>
         <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/CidadeControlador?opcao=cancelar">CIDADE</a></li>
+        <li><a class="contex" href="${pageContext.request.contextPath}${URL_BASE}/ItemVendaControlador">ITENS DE VENDA</a></li>
+
+        <li><a class="contex" href="${pageContext.request.contextPath}/relatorios.jsp">RELATÓRIOS</a></li>
 
         <c:choose>
             <c:when test="${empty sessionScope.usuarioLogado}">

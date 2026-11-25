@@ -1,0 +1,143 @@
+<jasperReport name="rel04_medicamentos_a_vencer" language="java" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="28" uuid="d1b272e0-c58f-4e43-a60b-5796dfd650af">
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<property name="net.sf.jasperreports.export.xls.white.page.background" value="false"/>
+	<style name="Zebra" mode="Opaque" fontName="DejaVu Sans">
+		<conditionalStyle mode="Opaque" backcolor="#EEF4F7">
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2==0]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<style name="Situacao" mode="Opaque" forecolor="#FFFFFF" fontName="DejaVu Sans" bold="true">
+		<conditionalStyle mode="Opaque" backcolor="#B00020">
+			<conditionExpression><![CDATA[$F{diasParaVencer} < 0]]></conditionExpression>
+		</conditionalStyle>
+		<conditionalStyle mode="Opaque" backcolor="#E65100">
+			<conditionExpression><![CDATA[$F{diasParaVencer} >= 0 && $F{diasParaVencer} <= 30]]></conditionExpression>
+		</conditionalStyle>
+		<conditionalStyle mode="Opaque" forecolor="#000000" backcolor="#F9A825">
+			<conditionExpression><![CDATA[$F{diasParaVencer} > 30]]></conditionExpression>
+		</conditionalStyle>
+	</style>
+	<parameter name="DIAS" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[90]]></defaultValueExpression>
+	</parameter>
+	<query language="sql"><![CDATA[SELECT m.nome AS medicamento,
+       m.dataValidade AS validade,
+       CAST(DATEDIFF(m.dataValidade, CURDATE()) AS SIGNED) AS diasParaVencer,
+       m.quantidadeEstoque AS estoque,
+       CAST(m.quantidadeEstoque*COALESCE(m.precoCusto,0) AS DECIMAL(12,2)) AS valorEmRisco
+FROM medicamento m
+WHERE m.dataValidade IS NOT NULL
+  AND m.dataValidade <= DATE_ADD(CURDATE(), INTERVAL $P{DIAS} DAY)
+ORDER BY m.dataValidade]]></query>
+	<field name="medicamento" class="java.lang.String"/>
+	<field name="validade" class="java.sql.Date"/>
+	<field name="diasParaVencer" class="java.lang.Long"/>
+	<field name="estoque" class="java.lang.Integer"/>
+	<field name="valorEmRisco" class="java.math.BigDecimal"/>
+	<variable name="TOT_RISCO" calculation="Sum" class="java.math.BigDecimal">
+		<expression><![CDATA[$F{valorEmRisco}]]></expression>
+	</variable>
+	<variable name="QTD_VENCIDOS" calculation="Sum" class="java.lang.Integer">
+		<expression><![CDATA[$F{diasParaVencer} < 0 ? 1 : 0]]></expression>
+	</variable>
+	<variable name="QTD_ITENS" calculation="Sum" class="java.lang.Integer">
+		<expression><![CDATA[1]]></expression>
+	</variable>
+	<title height="70">
+		<element kind="rectangle" uuid="2c670900-0f12-445f-b105-e069b5339d0f" mode="Opaque" x="0" y="0" width="555" height="62" backcolor="#1F6F8B">
+			<pen lineWidth="0.0"/>
+		</element>
+		<element kind="staticText" uuid="b4c23217-21e9-44a7-a6f3-ad60247122fc" x="10" y="6" width="535" height="30" forecolor="#FFFFFF" fontName="DejaVu Sans" fontSize="18.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Medicamentos a Vencer]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="84b95e23-563b-4fa2-8554-d7ec41f55dfa" x="10" y="36" width="535" height="22" forecolor="#FFFFFF" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA["Validade até hoje + " + $P{DIAS} + " dias  |  vermelho = vencido, laranja = até 30 dias, amarelo = acima de 30 dias"]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</title>
+	<columnHeader height="24">
+		<element kind="staticText" uuid="4df4bdc5-16bf-44f7-93df-38ee5ef6ffe0" mode="Opaque" x="0" y="0" width="195" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Left" vTextAlign="Middle">
+			<text><![CDATA[Medicamento]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="4876679f-0b42-4f63-982f-992f766825a0" mode="Opaque" x="195" y="0" width="75" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Validade]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="635082b1-36ff-4ea2-bbf7-acd34e1bbe13" mode="Opaque" x="270" y="0" width="45" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Dias]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="cb6a1712-bfc7-49f6-b183-88e8218b3b4d" mode="Opaque" x="315" y="0" width="55" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Estoque]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="fb05e3e2-e959-40fa-b3fa-58d0deee092f" mode="Opaque" x="370" y="0" width="100" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<text><![CDATA[Custo em risco]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="staticText" uuid="71337c64-05cb-440b-ba89-004673860de7" mode="Opaque" x="470" y="0" width="85" height="24" forecolor="#FFFFFF" backcolor="#1F6F8B" fontName="DejaVu Sans" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[Situação]]></text>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<element kind="textField" uuid="29fc4eef-509c-4ecf-92f2-9503799cf548" x="0" y="0" width="195" height="20" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{medicamento}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="8c8ee3ba-8d02-4572-bfdb-250861a890d9" x="195" y="0" width="75" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="dd/MM/yyyy" blankWhenNull="true" bold="false" hTextAlign="Center" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{validade}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="47794e78-1c14-43cb-8632-fa33d6f388f8" x="270" y="0" width="45" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="#,##0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{diasParaVencer}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="d8dafb55-eddd-4090-b9f2-b31374d14af3" x="315" y="0" width="55" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="#,##0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{estoque}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="d1d34641-ac11-4672-a1b1-dfaa7e9782fc" x="370" y="0" width="100" height="20" fontName="DejaVu Sans" fontSize="9.0" pattern="'R$ '#,##0.00" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle" style="Zebra">
+				<expression><![CDATA[$F{valorEmRisco}]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Zebra"/>
+			</element>
+			<element kind="textField" uuid="2e54b520-bc1d-426c-96b9-8c44a338be39" x="470" y="0" width="85" height="20" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="false" hTextAlign="Center" vTextAlign="Middle" style="Situacao">
+				<expression><![CDATA[$F{diasParaVencer} < 0 ? "VENCIDO" : ($F{diasParaVencer} <= 30 ? "CRÍTICO" : "ATENÇÃO")]]></expression>
+				<box leftPadding="4" rightPadding="4" style="Situacao"/>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="22">
+		<element kind="textField" uuid="891381d1-c39f-4be2-b551-4add33f74209" x="0" y="2" width="300" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA["Gerado em " + new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(new java.util.Date())]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="63179b35-4d28-440e-b0ba-17a2d5594c0d" x="405" y="2" width="120" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" blankWhenNull="true" bold="false" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA["Página " + $V{PAGE_NUMBER} + " de "]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="73ccafe9-18b4-47bf-90b8-2083516d544d" x="525" y="2" width="30" height="18" forecolor="#666666" fontName="DejaVu Sans" fontSize="8.0" evaluationTime="Report" blankWhenNull="true" bold="false" hTextAlign="Left" vTextAlign="Middle">
+			<expression><![CDATA[$V{PAGE_NUMBER}]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</pageFooter>
+	<summary height="32">
+		<element kind="textField" uuid="cc2502b2-9475-4c49-9e4c-d4f70c3b96fc" x="0" y="4" width="370" height="22" forecolor="#000000" fontName="DejaVu Sans" fontSize="9.0" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA["ITENS NA LISTA: " + $V{QTD_ITENS} + "   |   JÁ VENCIDOS: " + $V{QTD_VENCIDOS} + "   |   CUSTO TOTAL EM RISCO:"]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+		<element kind="textField" uuid="79de1394-291f-4be2-8689-83030de768a7" x="370" y="4" width="100" height="22" forecolor="#000000" fontName="DejaVu Sans" fontSize="9.0" pattern="'R$ '#,##0.00" blankWhenNull="true" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA[$V{TOT_RISCO}]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</summary>
+	<noData height="60">
+		<element kind="textField" uuid="45dc6154-67fd-4c96-b894-26b3a3484f15" x="0" y="10" width="555" height="40" forecolor="#B00020" fontName="DejaVu Sans" fontSize="12.0" blankWhenNull="true" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<expression><![CDATA["Nenhum dado encontrado para os filtros informados."]]></expression>
+			<box leftPadding="4" rightPadding="4"/>
+		</element>
+	</noData>
+</jasperReport>
